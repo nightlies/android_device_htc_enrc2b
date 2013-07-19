@@ -151,7 +151,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/soundimage/srs_geq10.cfg:system/etc/soundimage/srs_geq10.cfg \
     $(LOCAL_PATH)/prebuilt/soundimage/srs_global.cfg:system/etc/soundimage/srs_global.cfg \
     $(LOCAL_PATH)/prebuilt/soundimage/srsfx_trumedia_51.cfg:system/etc/soundimage/srsfx_trumedia_51.cfg \
-    $(LOCAL_PATH)/prebuilt/soundimage/srsfx_trumedia_movie.cfg:system/etc/soundimage/srsfx_trumedia_movie.cfg \ 
+    $(LOCAL_PATH)/prebuilt/soundimage/srsfx_trumedia_movie.cfg:system/etc/soundimage/srsfx_trumedia_movie.cfg \
     $(LOCAL_PATH)/prebuilt/soundimage/srsfx_trumedia_music.cfg:system/etc/soundimage/srsfx_trumedia_music.cfg \
     $(LOCAL_PATH)/prebuilt/soundimage/srsfx_trumedia_voice.cfg:system/etc/soundimage/srsfx_trumedia_voice.cfg
 
@@ -187,7 +187,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/tfa/voice.eq:system/etc/tfa/voice.eq \
     $(LOCAL_PATH)/prebuilt/tfa/voice.preset:system/etc/tfa/voice.preset \
     $(LOCAL_PATH)/prebuilt/tfa/voice.speaker:system/etc/tfa/voice.speaker \
-    $(LOCAL_PATH)/prebuilt/tfa/playback_XA.config/etc/tfa/playback_XA.config \
+    $(LOCAL_PATH)/prebuilt/tfa/playback_XA.config:system/etc/tfa/playback_XA.config \
     $(LOCAL_PATH)/prebuilt/tfa/playback_XA.eq:system/etc/tfa/playback_XA.eq \
     $(LOCAL_PATH)/prebuilt/tfa/playback_XA.preset:system/etc/tfa/playback_XA.preset \
     $(LOCAL_PATH)/prebuilt/tfa/playback_XA.speaker:system/etc/tfa/playback_XA.speaker 
