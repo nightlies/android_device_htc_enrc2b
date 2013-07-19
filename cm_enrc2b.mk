@@ -140,7 +140,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/soundimage/Sound_Original_Recording.txt:system/etc/soundimage/Sound_Original_Recording.txt \
     $(LOCAL_PATH)/prebuilt/soundimage/Sound_Original_monocamcorder.txt:system/etc/soundimage/Sound_Original_monocamcorder.txt \
     $(LOCAL_PATH)/prebuilt/soundimage/Sound_Phone_Original_HPST.txt:system/etc/soundimage/Sound_Phone_Original_HPST.txt \
-    $(LOCAL_PATH)/prebuilt/soundimage/soundimage/board_version.txt:system/etc/soundimage/soundimage/board_version.txt \
     $(LOCAL_PATH)/prebuilt/soundimage/srs_geq10.cfg:system/etc/soundimage/srs_geq10.cfg \
     $(LOCAL_PATH)/prebuilt/soundimage/srs_global.cfg:system/etc/soundimage/srs_global.cfg \
     $(LOCAL_PATH)/prebuilt/soundimage/srsfx_trumedia_51.cfg:system/etc/soundimage/srsfx_trumedia_51.cfg \
