@@ -40,6 +40,7 @@ PRODUCT_COPY_FILES := \
 
 # Prebuilt Audio/GPS/Camera/Wi-Fi configs
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/prebuilt/dsp/AIC3008_REG_DualMic_XC.csv:system/etc/AIC3008_REG_DualMic_XC.csv \
     $(LOCAL_PATH)/prebuilt/dsp/AIC3008_REG_DualMic_XA.csv:system/etc/AIC3008_REG_DualMic_XA.csv \
     $(LOCAL_PATH)/prebuilt/dsp/AIC3008_REG_DualMic.csv:system/etc/AIC3008_REG_DualMic.csv \
     $(LOCAL_PATH)/prebuilt/dsp/DSP_number.txt:system/etc/DSP_number.txt \
@@ -141,7 +142,19 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/soundimage/Sound_Voip_Original_SPK.txt:system/etc/soundimage/Sound_Voip_Original_SPK.txt \
     $(LOCAL_PATH)/prebuilt/soundimage/Sound_Voip_Original_SPK_XA.txt:system/etc/soundimage/Sound_Voip_Original_SPK_XA.txt \
     $(LOCAL_PATH)/prebuilt/soundimage/Sound_Voip_Original_SPK_AEC.txt:system/etc/soundimage/Sound_Voip_Original_SPK_AEC.txt \
-    $(LOCAL_PATH)/prebuilt/soundimage/Sound_Voip_Original_SPK_AEC_XA.txt:system/etc/soundimage/Sound_Voip_Original_SPK_AEC_XA.txt
+    $(LOCAL_PATH)/prebuilt/soundimage/Sound_Voip_Original_SPK_AEC_XA.txt:system/etc/soundimage/Sound_Voip_Original_SPK_AEC_XA.txt \
+    $(LOCAL_PATH)/prebuilt/soundimage/Sound_AMR_Recording.txt:system/etc/soundimage/Sound_AMR_Recording.txt \
+    $(LOCAL_PATH)/prebuilt/soundimage/Sound_Original_Recording.txt:system/etc/soundimage/Sound_Original_Recording.txt \
+    $(LOCAL_PATH)/prebuilt/soundimage/Sound_Original_monocamcorder.txt:system/etc/soundimage/Sound_Original_monocamcorder.txt \
+    $(LOCAL_PATH)/prebuilt/soundimage/Sound_Phone_Original_HPST.txt:system/etc/soundimage/Sound_Phone_Original_HPST.txt \
+    $(LOCAL_PATH)/prebuilt/soundimage/soundimage/board_version.txt:system/etc/soundimage/soundimage/board_version.txt \
+    $(LOCAL_PATH)/prebuilt/soundimage/srs_geq10.cfg:system/etc/soundimage/srs_geq10.cfg \
+    $(LOCAL_PATH)/prebuilt/soundimage/srs_global.cfg:system/etc/soundimage/srs_global.cfg \
+    $(LOCAL_PATH)/prebuilt/soundimage/srsfx_trumedia_51.cfg:system/etc/soundimage/srsfx_trumedia_51.cfg \
+    $(LOCAL_PATH)/prebuilt/soundimage/srsfx_trumedia_movie.cfg:system/etc/soundimage/srsfx_trumedia_movie.cfg \ 
+    $(LOCAL_PATH)/prebuilt/soundimage/srsfx_trumedia_music.cfg:system/etc/soundimage/srsfx_trumedia_music.cfg \
+    $(LOCAL_PATH)/prebuilt/soundimage/srsfx_trumedia_voice.cfg:system/etc/soundimage/srsfx_trumedia_voice.cfg
+
 
 # audio tfa - actually useless but keep it 
 PRODUCT_COPY_FILES += \
@@ -173,7 +186,11 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/tfa/voice.config:system/etc/tfa/voice.config \
     $(LOCAL_PATH)/prebuilt/tfa/voice.eq:system/etc/tfa/voice.eq \
     $(LOCAL_PATH)/prebuilt/tfa/voice.preset:system/etc/tfa/voice.preset \
-    $(LOCAL_PATH)/prebuilt/tfa/voice.speaker:system/etc/tfa/voice.speaker
+    $(LOCAL_PATH)/prebuilt/tfa/voice.speaker:system/etc/tfa/voice.speaker \
+    $(LOCAL_PATH)/prebuilt/tfa/playback_XA.config/etc/tfa/playback_XA.config \
+    $(LOCAL_PATH)/prebuilt/tfa/playback_XA.eq:system/etc/tfa/playback_XA.eq \
+    $(LOCAL_PATH)/prebuilt/tfa/playback_XA.preset:system/etc/tfa/playback_XA.preset \
+    $(LOCAL_PATH)/prebuilt/tfa/playback_XA.speaker:system/etc/tfa/playback_XA.speaker 
 
 # Vold.fstab
 PRODUCT_COPY_FILES += \
