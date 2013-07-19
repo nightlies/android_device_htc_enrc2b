@@ -207,7 +207,7 @@ PRODUCT_PACKAGES += \
     audio.usb.default \
     libtinyalsa \
     libaudioutils \
-    libinvensense_mpl
+    libinvensense_mpl \
 
 # pollyd
 PRODUCT_PACKAGES += \
@@ -223,9 +223,7 @@ PRODUCT_PACKAGES += \
     bash \
     CMFileManager \
     PinyinIME \
-    PerformanceTool \
-    Torch \
-    CellBroadcastReceiver 
+    Torch 
 
 # Misc
 PRODUCT_PACKAGES += \

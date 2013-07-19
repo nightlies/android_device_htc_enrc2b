@@ -55,6 +55,9 @@ lib/hw/gps.tegra.so
 lib/hw/gralloc.default.so
 lib/hw/gralloc.tegra.so
 lib/hw/hwcomposer.tegra.so
+lib/hw/audio.primary.default.so
+lib/hw/audio.primary.tegra.so
+lib/hw/hwcomposer.tegra.so
 lib/hw/keystore.default.so
 lib/hw/local_time.default.so
 lib/hw/nfc.enrc2b.so
