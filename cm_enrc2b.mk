@@ -212,9 +212,11 @@ PRODUCT_PACKAGES += \
 
 # Audio
 PRODUCT_PACKAGES += \
+    audio.a2dp.default \
+    audio.usb.default \
     libtinyalsa \
     libaudioutils \
-    libinvensense_mpl
+    libinvensense_mpl \
 
 # pollyd
 PRODUCT_PACKAGES += \
