@@ -71,7 +71,7 @@ DISABLE_DROIDDOC := true
 ifeq ($(HAVE_SELINUX),true)
 
 BOARD_SEPOLICY_DIRS := \
-    device/asus/tf700t/selinux
+    device/htc/enrc2b/selinux
 
 BOARD_SEPOLICY_UNION := \
     file_contexts \
