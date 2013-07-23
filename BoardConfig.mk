@@ -68,4 +68,15 @@ TARGET_KERNEL_CONFIG := lenny_defconfig
 # dont build docs
 DISABLE_DROIDDOC := true
 
+ifeq ($(HAVE_SELINUX),true)
 
+BOARD_SEPOLICY_DIRS := \
+    device/asus/tf700t/selinux
+
+BOARD_SEPOLICY_UNION := \
+    file_contexts \
+    file.te \
+    device.te \
+    domain.te
+
+endif
