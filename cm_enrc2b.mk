@@ -219,12 +219,7 @@ PRODUCT_PACKAGES += \
     libaudioutils \
     libinvensense_mpl
 
-# pollyd
-PRODUCT_PACKAGES += \
-    Polly \
-    pollyd
-
-# other apps
+#Other apps
 PRODUCT_PACKAGES += \
     Apollo \
     DSPManager \
