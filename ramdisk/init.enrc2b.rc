@@ -1,15 +1,12 @@
+import init.enrc2b.usb.rc
+
 on early-init
     mount debugfs debugfs /sys/kernel/debug
-    write /sys/class/firmware/timeout 5
 
 on init
     # See storage config details at http://source.android.com/tech/storage/
     mkdir /mnt/shell/emulated 0700 shell shell
     mkdir /storage/emulated 0555 root root
-    
-    # TEMP MUST REMOVE WHEN A PROPER FIX HAS BEEN FOUND
-
-    mkdir /cache/dalvik-cache 777 system system
 
     export EXTERNAL_STORAGE /storage/emulated/legacy
     export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
@@ -20,23 +17,48 @@ on init
     symlink /storage/emulated/legacy /mnt/sdcard
     symlink /storage/emulated/legacy /storage/sdcard0
     symlink /mnt/shell/emulated/0 /storage/emulated/legacy
-    symlink /storage/sdcard0 /sdcard
-    symlink /storage/sdcard0 /mnt/sdcard
-    symlink /storage/sdcard0 /usbdisk
-    symlink /storage/sdcard0 /mnt/usbdisk
 
-    mkdir /mnt/usb 0775 system system
+    # create directory for mounting usb drives
+    mkdir /storage/usbdisk 0666 system system
+    symlink /storage/usbdisk /mnt/usbdisk
+    symlink /mnt/usbdisk /usbdisk
+
+on early-boot
+    chown system /sys/module/edp/parameters/edp_ap_limit
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor interactive
+    restorecon /sys/devices/system/cpu
+    restorecon /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    restorecon /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
+    restorecon /sys/devices/system/cpu/cpufreq/interactive/boost
+    restorecon /sys/devices/system/cpu/cpufreq/interactive/boost_factor
+    restorecon /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+    restorecon /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load
+    restorecon /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+    restorecon /sys/devices/system/cpu/cpufreq/interactive/input_boost
+    restorecon /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+    restorecon /sys/devices/system/cpu/cpufreq/interactive/max_boost
+    restorecon /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
+    restorecon /sys/devices/system/cpu/cpufreq/interactive/sustain_load
+    restorecon /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+    restorecon /sys/devices/tegradc.0/smartdimmer/aggressiveness
+    restorecon /sys/devices/tegradc.0/smartdimmer/enable
+    chmod 0660 /sys/kernel/debug/tegra_hotplug/min_cpus
+    chown system /sys/htc/power_save
+    chown system /sys/kernel/debug/tegra_emc/eack_state
     
 on fs
+    setprop ro.crypto.umount_sd false
+    mount_all /fstab.enrc2b
+    restorecon /dev/block/platform/sdhci-tegra.3/by-name/PER
     mkdir /rca 0775 radio radio
     mkdir /rfs 0755 radio radio
     mkdir /devlog 0700 root root
-    mount_all /fstab.enrc2b
     chmod 0660 /rca/calib.nvm
     chmod 0660 /rca
     chmod 0660 /rfs
-    setprop ro.crypto.fuse_sdcard true
-    setprop ro.crypto.umount_sd false
 	
 on post-fs-data
     # We will remap this as /storage/sdcard0 with the sdcard fuse tool
@@ -46,7 +68,6 @@ on post-fs-data
     # Set indication (checked by vold) that we have finished this action
     setprop vold.post_fs_data_done 1
 
-
 on boot
     # Setup paths used for socket communication with the dhcp daemon(dhcpd)
     mkdir /data/nvcam 0777 system system
@@ -55,25 +76,6 @@ on boot
     mkdir /data/misc/wifi/hostapd 0777 wifi wifi
     mkdir /data/misc/dhcp 0777 dhcp dhcp
     chown dhcp dhcp /data/misc/dhcp
-
-    chown system /sys/module/edp/parameters/edp_ap_limit
-    chown system /sys/devices/system/cpu/cpufreq/ondemand/touch_poke
-    chmod 644 /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate_min
-    chown system /sys/devices/system/cpu/cpu_on
-    chown system /sys/kernel/debug/tegra_hotplug/min_cpus
-    chown system /sys/kernel/debug/tegra_hotplug/max_cpus
-    chown system /sys/module/cpu_tegra3/parameters/auto_hotplug
-    chown system /sys/devices/system/cpu/cpu1/online
-    chown system /sys/devices/system/cpu/cpu2/online
-    chown system /sys/devices/system/cpu/cpu3/online
-    chown system /sys/module/cpu_tegra3/parameters/mp_policy
-    chown system /sys/module/cpu_tegra3/parameters/NwNs
-    chown system /sys/module/cpu_tegra3/parameters/TwTs
-    chown system /sys/module/cpu_tegra/parameters/cpu_user_cap
-    chown system /sys/kernel/debug/tegra_hotplug/min_cpus
-    chmod 0660 /sys/kernel/debug/tegra_hotplug/min_cpus
-    chown system /sys/htc/power_save
-    chown system /sys/kernel/debug/tegra_emc/eack_state
 
     # for radio signal stable
     chown radio radio /sys/class/power_supply/battery/charger_control
@@ -98,19 +100,25 @@ on boot
 	chown system system /sys/class/android_usb/android0/f_rndis/ethaddr
     chmod 0660 /sys/class/android_usb/android0/f_rndis/ethaddr
 
+# Allow system UID to setenforce and set booleans.
+    chown system system /selinux/enforce
+    chown system system /sys/fs/selinux/enforce
+    chown -R system system /selinux/booleans
+    chown -R system system /sys/fs/selinux/booleans
+    chown system system /selinux/commit_pending_bools
+    chown system system /sys/fs/selinux/commit_pending_bools
+ 
 # Load modules while booting 
     insmod /system/lib/modules/bcmdhd.ko
-    #insmod /lib/modules/baseband-xmm-power2.ko
-    #insmod /lib/modules/baseband_usb_chr.ko
-    #insmod /lib/modules/cdc-acm.ko
-    #insmod /lib/modules/raw_ip_net.ko
 
 # bluetooth
-    chown bluetooth net_bt_stack /dev/ttyHS2
+    # UART device
     chmod 0660 /dev/ttyHS2
+    chown bluetooth net_bt_stack /dev/ttyHS2
 
-    # Power up/down interface
+    # power up/down interface
     chmod 0660 /sys/class/rfkill/rfkill0/state
+    chmod 0660 /sys/class/rfkill/rfkill0/type
     chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
     chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/type
     restorecon /sys/devices/platform/bcm4330_rfkill/rfkill/rfkill0/state
@@ -193,6 +201,22 @@ on boot
     chown system system /sys/bus/iio/devices/device0/als_ir_mode
     chown system system /sys/bus/iio/devices/device0/proximity_enable
 
+# Interactive governor settings
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/boost_factor
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boost_factor
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/max_boost
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/max_boost
+    chown system system /sys/devices/system/cpu/cpufreq/interactive/sustain_load
+    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/sustain_load
+
+# Default Read Ahead value for sdcards
+    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
+    write /sys/block/mmcblk1/queue/read_ahead_kb 2048
+
 # BB remote file system
     mkdir /data/rfs
     mkdir /data/rfs/data
@@ -228,11 +252,7 @@ on boot
     chown system /sys/htc/media_boost_freq
     chgrp system /sys/htc/media_boost_freq
     
-    # Increase read ahead size of mmc block devices from default(128) to 1MB
-    # Reduces power comsuption during video playback from sdcards
-    write /sys/block/mmcblk0/queue/read_ahead_kb 1024
-    write /sys/block/mmcblk0/bdi/read_ahead_kb 1024
-    
+ 
     # Flash storage isn't a good entropy source, and only causes locking	
     # overhead in the kernel. Turn it off
     write /sys/block/mmcblk0/queue/add_random 0
@@ -276,11 +296,11 @@ service init-acmx2 /system/bin/chmod 777 /dev/ttyACMX0
     oneshot
 
 # Start GPS daemon
-service gps-daemon /system/bin/glgps -c /system/etc/gps/gpsconfig.xml
-    socket gps seqpacket 0660 gps system
-    class main
-    user gps
-    group system sdcard_rw inet radio sdcard_r
+  on boot
+  service gps-daemon /system/bin/glgps -c /system/etc/gps/gpsconfig.xml
+  user gps
+  group system
+  class late_start
 
 service poweron_modem /system/bin/poweron_modem_fls.sh /data/modem_work/
     class main
@@ -365,20 +385,6 @@ on property:tf.enable=y
     mkdir /data/tf
     start tf_daemon
 
-# Discretix DRM change start
-#service dx_drm_server /system/bin/DxDrmServerIpc -f -o allow_other /data/DxDrm/fuse
-#    class main
-
-# OMA DRM change start
-#service fusermount /system/bin/fusermount -u /data/htcfs
-#    disabled
-#    oneshot
-
-#service htcfs /system/bin/htcfs /data/htcfs -f -o allow_other
-#    class main
-#    onrestart restart fusermount
-# OMA DRM change end
-
 # create filesystems if necessary
 service setup_fs /system/bin/setup_fs \
         /dev/block/platform/sdhci-tegra.3/by-name/UDA \
@@ -450,31 +456,6 @@ on property:ro.hdmi.enable=true
     chmod 0660 /sys/power/wake_lock
     chmod 0660 /sys/power/wake_unlock
 
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load
-    chmod 0664 /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/boost_factor
-    chmod 0664 /sys/devices/system/cpu/cpufreq/interactive/boost_factor
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/max_boost
-    chmod 0664 /sys/devices/system/cpu/cpufreq/interactive/max_boost
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/sustain_load
-    chmod 0664 /sys/devices/system/cpu/cpufreq/interactive/isustain_load
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
-    chmod 0664 /sys/devices/system/cpu/cpufreq/interactive/min_sample_time
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/timer_rate
-    chmod 0664 /sys/devices/system/cpu/cpufreq/interactive/timer_rate
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/input_boost
-    chmod 0664 /sys/devices/system/cpu/cpufreq/interactive/input_boost
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/boost
-    chmod 0664 /sys/devices/system/cpu/cpufreq/interactive/boost
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
-    chmod 0664 /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
-    chmod 0664 /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
-    chmod 0664 /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
-    chown system system /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
-    chmod 0664 /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
-
     # Assume SMP uses shared cpufreq policy for all CPUs
     chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
     chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
@@ -533,13 +514,17 @@ on property:ro.hdmi.enable=true
     
     class_start main
 
-    # maxwen: is done in userinit below
-    # Run sysinit
-    #exec /system/bin/sysinit
+service modem-daemon /system/bin/modemd
 
-on property:selinux.reload_policy=1
-    restart ueventd
-    restart installd
+service ril-daemon /system/bin/rild
+    class main
+    socket rild stream 660 root radio
+    socket rild-debug stream 660 radio system
+    socket rild-htc-coredump stream 660 radio system
+    socket rild-agps stream 660 radio system
+    socket rild-audio stream 660 radio audio
+    user root
+    group radio cache inet misc audio log
 
  service choice_fn /sbin/choice_fn
     oneshot
@@ -614,18 +599,6 @@ service nvm-server /system/bin/nvm_server
     user root
     group root
     oneshot
-
-service modem-daemon /system/bin/modemd
-
-service ril-daemon /system/bin/rild
-    class main
-    socket rild stream 660 root radio
-    socket rild-debug stream 660 radio system
-    socket rild-htc-coredump stream 660 radio system
-    socket rild-agps stream 660 radio system
-    socket rild-audio stream 660 radio audio
-    user root
-    group radio cache inet misc audio log
 
 service surfaceflinger /system/bin/surfaceflinger
     class main
